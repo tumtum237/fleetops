@@ -1,0 +1,33 @@
+services:
+
+  api:
+    build: .
+    image: fleetops-api:1.0
+    container_name: fleetops-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - fleetops-net
+
+  db:
+    image: postgres:16
+    container_name: fleetops-db
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Paris
+      POSTGRES_USER: fleetops
+      POSTGRES_PASSWORD: fleetops_password
+      POSTGRES_DB: fleetops
+    volumes:
+      - fleetops_db_data:/var/lib/postgresql/data
+    networks:
+      - fleetops-net
+
+volumes:
+  fleetops_db_data:
+
+networks:
+  fleetops-net:
